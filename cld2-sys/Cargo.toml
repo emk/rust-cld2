@@ -1,0 +1,5 @@
+[package]
+
+name = "cld2-sys"
+version = "0.0.1"
+authors = ["Eric Kidd <git@randomhacks.net>"]
