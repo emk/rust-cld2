@@ -31,6 +31,11 @@ extern "C" {
     pub fn CLD2_ResultChunkVector_size(chunks: *const ResultChunks) -> size_t;
     pub fn CLD2_ResultChunkVector_delete(chunks: *mut ResultChunks);
 
+    pub fn CLD2_LanguageName(lang: Language) -> *const c_char;
+    pub fn CLD2_LanguageCode(lang: Language) -> *const c_char;
+    pub fn CLD2_LanguageDeclaredName(lang: Language) -> *const c_char;
+    pub fn CLD2_GetLanguageFromName(src: *const c_char) -> Language;
+
     pub fn CLD2_DetectLanguage(buffer: *const c_char,
                                buffer_length: c_int,
                                is_plain_text: bool, is_reliable: *mut bool)

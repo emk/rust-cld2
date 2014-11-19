@@ -134,3 +134,20 @@ Et puis encore comme ça.
 
     unsafe { CLD2_ResultChunkVector_delete(chunks); }
 }
+
+#[test]
+fn test_language_names() {
+    use std::c_str::CString;
+
+    let code = unsafe { 
+        let char_ptr = CLD2_LanguageCode(Language::ENGLISH);
+        let c_str = CString::new(char_ptr, false);
+        c_str.as_str().unwrap().to_string()
+    };
+    assert_eq!("en", code.as_slice());
+
+    let language = unsafe {
+        "fr".to_string().with_c_str(|ptr| { CLD2_GetLanguageFromName(ptr) })
+    };
+    assert_eq!(Language::FRENCH, language);
+}

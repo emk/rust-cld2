@@ -22,6 +22,22 @@ void CLD2_ResultChunkVector_delete(ResultChunks *chunks) {
     delete vec;
 }
 
+const char* CLD2_LanguageName(Language lang) {
+    return CLD2::LanguageName(lang);
+}
+
+const char* CLD2_LanguageCode(Language lang) {
+    return CLD2::LanguageCode(lang);
+}
+
+const char* CLD2_LanguageDeclaredName(Language lang) {
+    return CLD2::LanguageDeclaredName(lang);
+}
+
+Language CLD2_GetLanguageFromName(const char* src) {
+    return CLD2::GetLanguageFromName(src);
+}
+
 Language CLD2_DetectLanguage(const char* buffer,
                              int buffer_length,
                              bool is_plain_text,

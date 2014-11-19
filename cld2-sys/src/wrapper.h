@@ -71,6 +71,13 @@ extern "C" {
   size_t CLD2_ResultChunkVector_size(const ResultChunks *chunks);
   void CLD2_ResultChunkVector_delete(ResultChunks *chunks);
 
+  // These APIs are in a private header included by a public header, but
+  // they're really useful, so let's assume they're public.
+  const char* CLD2_LanguageName(Language lang);
+  const char* CLD2_LanguageCode(Language lang);
+  const char* CLD2_LanguageDeclaredName(Language lang);
+  Language CLD2_GetLanguageFromName(const char* src);
+
   // Scan interchange-valid UTF-8 bytes and detect most likely language
   Language CLD2_DetectLanguage(
                           const char* buffer,
