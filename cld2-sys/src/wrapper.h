@@ -34,6 +34,7 @@ typedef CLD2::uint16 uint16;
 
 // We're being run through bindgen or a similar tool, so just stub all
 // this.
+typedef long long size_t;
 typedef short uint16;
 typedef char bool;
 // Corresponds to the Language enumeration in the C++ headers.
@@ -63,6 +64,12 @@ extern "C" {
 
   //typedef std::vector<ResultChunk> ResultChunkVector;
 
+  // A wrapper around ResultChunkVector, which is a C++ type.
+  typedef void ResultChunks;
+  ResultChunks *CLD2_ResultChunkVector_new();
+  const ResultChunk *CLD2_ResultChunkVector_data(const ResultChunks *chunks);
+  size_t CLD2_ResultChunkVector_size(const ResultChunks *chunks);
+  void CLD2_ResultChunkVector_delete(ResultChunks *chunks);
 
   // Scan interchange-valid UTF-8 bytes and detect most likely language
   Language CLD2_DetectLanguage(
@@ -151,7 +158,6 @@ extern "C" {
                           int* text_bytes,
                           bool* is_reliable);
 
-
   // Use this one.
   // Hints are collected into a struct.
   // Flags are passed in (normally zero).
@@ -165,7 +171,6 @@ extern "C" {
   // spell-check, translate, or otherwaise process different parts of the input
   // buffer in language-dependant ways.
   //
-  /* Needs a custom C wrapper to handle std::vector.
   Language CLD2_ExtDetectLanguageSummary4(
                           const char* buffer,
                           int buffer_length,
@@ -175,10 +180,9 @@ extern "C" {
                           Language* language3,
                           int* percent3,
                           double* normalized_score3,
-                          ResultChunkVector* resultchunkvector,
+                          ResultChunks *resultchunkvector,
                           int* text_bytes,
                           bool* is_reliable);
-  */
 
   // Return version text string
   // String is "code_version - data_build_date"
