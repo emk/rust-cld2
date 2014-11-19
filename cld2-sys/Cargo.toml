@@ -3,3 +3,8 @@
 name = "cld2-sys"
 version = "0.0.1"
 authors = ["Eric Kidd <git@randomhacks.net>"]
+links = "cld2"
+build = "src/build.rs"
+
+[build-dependencies.gcc]
+git = "https://github.com/alexcrichton/gcc-rs"
