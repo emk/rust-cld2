@@ -3,3 +3,6 @@
 name = "cld2"
 version = "0.0.1"
 authors = ["Eric Kidd <git@randomhacks.net>"]
+
+[dependencies.cld2-sys]
+path = "cld2-sys"
