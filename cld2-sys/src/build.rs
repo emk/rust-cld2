@@ -16,13 +16,20 @@ static CLD2_FULL_SOURCES: &'static [&'static str] = [
 
 fn main() {
     let includes = vec![Path::new("cld2/public"), Path::new("cld2/internal")];
-    let sources: Vec<String> = CLD2_FULL_SOURCES.iter()
+    let mut sources: Vec<String> = CLD2_FULL_SOURCES.iter()
         .map(|p| format!("cld2/internal/{}", p))
         .collect();
+    sources.push("src/wrapper.cpp".to_string());
     let sources_str: Vec<&str> = sources.iter().map(|p| p.as_slice()).collect();
 
     gcc::compile_library("libcld2.a", &gcc::Config {
         include_directories: includes,
         .. Default::default()
     }, sources_str.as_slice());
+
+    // Decide how to link our C++ runtime.  Feel free to submit patches
+    // to make this work on your platform.  Other likely options are "c++"
+    // and "c++abi" depending on OS and compiler.
+    let cxx_abi = "stdc++";
+    println!("cargo:rustc-flags=-l {}", cxx_abi);
 }
