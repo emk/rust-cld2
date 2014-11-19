@@ -1,0 +1,3 @@
+[submodule "cld2-sys/cld2"]
+	path = cld2-sys/cld2
+	url = https://github.com/scrapinghub/cld2
