@@ -8,17 +8,24 @@
 
 #![feature(globs)]
 #![allow(non_camel_case_types)]
+#![allow(non_upper_case_globals)]
 
 extern crate libc;
 
 pub use encodings::*;
 pub use languages::*;
+pub use flags::*;
 pub use wrapper::*;
 
 mod encodings;
 mod languages;
+mod flags;
 mod wrapper;
 
+// Just a single placeholder test in case somebody runs 'cargo test' in
+// this library's directory, and not in the main library's directory.  This
+// is not intended to be comprehensive, but please add regression tests for
+// any bugs.
 #[test]
 fn test_detection() {
     let english = "
