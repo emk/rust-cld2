@@ -14,7 +14,7 @@ use types::*;
 /// Detect the language of the input text.
 ///
 /// ```
-/// use cld2::{detect_language, Format, Reliable, LanguageCode};
+/// use cld2::{detect_language, Format, Reliable, Unreliable, Lang};
 ///
 /// let text = "
 /// It is an ancient Mariner,
@@ -22,14 +22,14 @@ use types::*;
 /// 'By thy long grey beard and glittering eye,
 /// Now wherefore stopp'st thou me?
 /// ";
-/// assert_eq!((Some(LanguageCode("en")), Reliable::Yes),
+/// assert_eq!((Some(Lang("en")), Reliable),
 ///            detect_language(text, Format::Text));
 ///
-/// assert_eq!((None, Reliable::No),
+/// assert_eq!((None, Unreliable),
 ///            detect_language("blah", Format::Html));
 /// ```
 pub fn detect_language(text: &str, format: Format) ->
-    (Option<LanguageCode>, Reliable)
+    (Option<Lang>, Reliability)
 {
     let result = detect_language_summary(text, format, &Default::default());
     (result.language, result.reliable)
@@ -72,7 +72,7 @@ impl<'a> WithCRep<*const CLDHints> for Hints<'a> {
         let tld = self.tld.map(|v| v.to_c_str());
         let tld_ptr = tld.map(|v| v.as_ptr()).unwrap_or(null());
         let lang = self.language
-            .map(|LanguageCode(c)| LanguageIdExt::from_name(c))
+            .map(|Lang(c)| LanguageIdExt::from_name(c))
             .unwrap_or(LanguageId::UNKNOWN_LANGUAGE);
         let encoding = self.encoding
             .unwrap_or(Encoding::UNKNOWN_ENCODING) as c_int;
@@ -96,5 +96,5 @@ fn from_ffi(lang: LanguageId, language3: &[LanguageId, ..3],
     DetectionResult{language: lang.to_lang(),
                     scores: [score_n(0), score_n(1), score_n(2)],
                     text_bytes: text_bytes,
-                    reliable: Reliable::from_bool(reliable)}
+                    reliable: Reliability::from_bool(reliable)}
 }
