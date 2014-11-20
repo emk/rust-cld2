@@ -74,7 +74,7 @@ pub struct LanguageScore {
     pub percent: u8,
 
     /// Scores near 1.0 indicate a "normal" text for this language.  Scores
-    /// further away from 1.0 indicated strange or atypical texts.
+    /// further away from 1.0 indicate strange or atypical texts.
     pub normalized_score: f64
 }
 

@@ -29,7 +29,7 @@ use types::*;
 pub fn detect_language(text: &str, format: Format) ->
     (Option<Lang>, Reliability)
 {
-    let result = detect_language_summary(text, format, &Default::default());
+    let result = detect_language_ext(text, format, &Default::default());
     (result.language, result.reliability)
 }
 
@@ -51,11 +51,11 @@ pub fn detect_language(text: &str, format: Format) ->
 /// Et puis encore comme ça.";
 ///
 /// let detected =
-///   detect_language_summary(text, Format::Text, &Default::default());
+///   detect_language_ext(text, Format::Text, &Default::default());
 /// 
 /// assert_eq!(Some(Lang("fr")), detected.language);
 /// ```
-pub fn detect_language_summary(text: &str, format: Format, hints: &Hints)
+pub fn detect_language_ext(text: &str, format: Format, hints: &Hints)
     -> DetectionResult
 {
     let mut language3 = [LanguageId::UNKNOWN_LANGUAGE,
