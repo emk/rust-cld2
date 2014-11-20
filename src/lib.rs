@@ -3,7 +3,7 @@
 
 #![license = "Public domain (Unlicense)"]
 #![unstable]
-#![warn(missing_docs)]
+#![deny(missing_docs)]
 #![feature(globs)]
 
 extern crate libc;

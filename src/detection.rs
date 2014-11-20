@@ -4,8 +4,7 @@ use std::default::Default;
 use std::ptr::{null, null_mut};
 
 use libc::{c_int, c_double};
-use ffi::{CLD2_DetectLanguage, CLDHints, Encoding,
-          CLD2_ExtDetectLanguageSummary4};
+use ffi::{CLDHints, Encoding, CLD2_ExtDetectLanguageSummary4};
 use ffi::Language as LanguageId;
 
 use language::LanguageIdExt;
@@ -16,12 +15,11 @@ use types::*;
 /// ```
 /// use cld2::{detect_language, Format, Reliable, Unreliable, Lang};
 ///
-/// let text = "
-/// It is an ancient Mariner,
+/// let text = "It is an ancient Mariner,
 /// And he stoppeth one of three.
 /// 'By thy long grey beard and glittering eye,
-/// Now wherefore stopp'st thou me?
-/// ";
+/// Now wherefore stopp'st thou me?";
+///
 /// assert_eq!((Some(Lang("en")), Reliable),
 ///            detect_language(text, Format::Text));
 ///
@@ -32,9 +30,31 @@ pub fn detect_language(text: &str, format: Format) ->
     (Option<Lang>, Reliability)
 {
     let result = detect_language_summary(text, format, &Default::default());
-    (result.language, result.reliable)
+    (result.language, result.reliability)
 }
 
+/// Detect the language of the input text, using optional hints, and return
+/// detailed statistics.
+///
+/// ```
+/// use std::default::Default;
+/// use cld2::{detect_language_summary, Format, Lang};
+///
+/// let text = "Sur le pont d'Avignon,
+/// L'on y danse, l'on y danse,
+/// Sur le pont d'Avignon
+/// L'on y danse tous en rond.
+///
+/// Les belles dames font comme ça
+/// Et puis encore comme ça.
+/// Les messieurs font comme ça
+/// Et puis encore comme ça.";
+///
+/// let detected =
+///   detect_language_summary(text, Format::Text, &Default::default());
+/// 
+/// assert_eq!(Some(Lang("fr")), detected.language);
+/// ```
 pub fn detect_language_summary(text: &str, format: Format, hints: &Hints)
     -> DetectionResult
 {
@@ -61,7 +81,10 @@ pub fn detect_language_summary(text: &str, format: Format, hints: &Hints)
     }
 }
 
+/// A value which can be converted to type `R` for use with the FFI.
 trait WithCRep<R> {
+    /// Call the function `body` with a C-compatible represention of type
+    /// `R`.
     fn with_c_rep<T>(&self, body: |R| -> T) -> T;
 }
 
@@ -89,12 +112,12 @@ fn from_ffi(lang: LanguageId, language3: &[LanguageId, ..3],
 {
     let score_n = |n| {
         LanguageScore{language: language3[n].to_lang(),
-                      percent: percent3[n],
+                      percent: percent3[n] as u8,
                       normalized_score: normalized_score3[n]}
     };
 
-    DetectionResult{language: lang.to_lang(),
-                    scores: [score_n(0), score_n(1), score_n(2)],
-                    text_bytes: text_bytes,
-                    reliable: Reliability::from_bool(reliable)}
+    DetectionResult::new(lang.to_lang(),
+                         [score_n(0), score_n(1), score_n(2)],
+                         text_bytes,
+                         Reliability::from_bool(reliable))
 }
