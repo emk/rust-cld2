@@ -9,6 +9,8 @@ use ffi::{CLD2_GetLanguageFromName, CLD2_LanguageName,
           CLD2_LanguageCode, CLD2_LanguageDeclaredName};
 pub use ffi::Language as LanguageId;
 
+use types::LanguageCode;
+
 pub trait LanguageIdExt {
     fn from_name(name: &str) -> Self;
     fn name(&self) -> &'static str;
@@ -16,6 +18,7 @@ pub trait LanguageIdExt {
     fn declared_name(&self) -> &'static str;
     fn is_unknown(&self) -> bool;
     fn is_known(&self) -> bool;
+    fn to_lang(&self) -> Option<LanguageCode>;
 }
 
 impl LanguageIdExt for LanguageId {
@@ -37,6 +40,14 @@ impl LanguageIdExt for LanguageId {
 
     fn is_unknown(&self) -> bool { *self == LanguageId::UNKNOWN_LANGUAGE }
     fn is_known(&self) -> bool { *self != LanguageId::UNKNOWN_LANGUAGE }
+
+    fn to_lang(&self) -> Option<LanguageCode> {
+        if self.is_known() {
+            Some(LanguageCode(self.code()))
+        } else {
+            None
+        }
+    }
 }
 
 #[test]

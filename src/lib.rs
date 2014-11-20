@@ -9,7 +9,9 @@
 extern crate libc;
 extern crate "cld2-sys" as ffi;
 
+pub use types::*;
 pub use detection::*;
 
+mod types;
 mod language;
 mod detection;
