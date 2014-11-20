@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/emk/rust-cld2.svg?branch=master)](https://travis-ci.org/emk/rust-cld2)
+
 This Rust library detects the language of a string using the
 [cld2 library][cld2] from the Chromium project.
 
