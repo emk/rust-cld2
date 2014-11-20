@@ -102,8 +102,9 @@ pub struct DetectionResult {
 }
 
 impl DetectionResult {
-    /// Create a new DetectionResult.  You don't actually need to call
+    /// Create a new DetectionResult.  You generally don't need to call
     /// this directly.
+    #[experimental]
     pub fn new(language: Option<Lang>, scores: [LanguageScore, ..3],
                text_bytes: i32, reliability: Reliability) -> DetectionResult {
         DetectionResult{language: language, scores: scores,
