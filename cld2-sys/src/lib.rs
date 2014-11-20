@@ -6,7 +6,6 @@
 //! If you need access to APIs which are not currently wrapped, please feel
 //! free to send pull requests!
 
-#![license = "Public domain (Unlicense) + Apache License 2.0"]
 #![feature(globs)]
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]

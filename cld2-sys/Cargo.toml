@@ -6,5 +6,11 @@ authors = ["Eric Kidd <git@randomhacks.net>"]
 links = "cld2"
 build = "src/build.rs"
 
-[build-dependencies.gcc]
-git = "https://github.com/alexcrichton/gcc-rs"
+description = "Unsafe, low-level wrapper for cld2 language detection library"
+license = "Unlicense/Apache-2.0"
+
+documentation = "http://www.rust-ci.org/emk/rust-cld2/doc/cld2-sys/"
+repository = "https://github.com/emk/rust-cld2"
+
+[build-dependencies]
+gcc = "~0.0.1"

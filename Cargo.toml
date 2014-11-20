@@ -4,5 +4,13 @@ name = "cld2"
 version = "0.0.1"
 authors = ["Eric Kidd <git@randomhacks.net>"]
 
+description = "Detect natural language used in text using cld2 library"
+license = "Unlicense"
+
+documentation = "http://www.rust-ci.org/emk/rust-cld2/doc/cld2/"
+repository = "https://github.com/emk/rust-cld2"
+readme = "README.md"
+keywords = ["text"]
+
 [dependencies.cld2-sys]
 path = "cld2-sys"
