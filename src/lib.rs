@@ -19,7 +19,11 @@
 //! answers&mdash;it wouldn't make a very good multi-lingual spellchecker
 //! component, for example.  As always, pull requests are eagerly welcome!
 //!
+//! For more information, see the [GitHub project][github] for this
+//! library.
+//!
 //! [cld2]: https://code.google.com/p/cld2/
+//! [github]: https://github.com/emk/rust-cld2
 
 #![license = "Public domain (Unlicense)"]
 #![unstable]
