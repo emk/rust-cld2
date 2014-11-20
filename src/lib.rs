@@ -2,7 +2,7 @@
 //! Chromium project.
 //!
 //! ```
-//! use cld2::{detect_language, Format, Reliable, Unreliable, Lang};
+//! use cld2::{detect_language, Format, Reliable, Lang};
 //!
 //! let text = "It is an ancient Mariner,
 //! And he stoppeth one of three.

@@ -38,7 +38,7 @@ pub fn detect_language(text: &str, format: Format) ->
 ///
 /// ```
 /// use std::default::Default;
-/// use cld2::{detect_language_summary, Format, Lang};
+/// use cld2::{detect_language_ext, Format, Lang};
 ///
 /// let text = "Sur le pont d'Avignon,
 /// L'on y danse, l'on y danse,

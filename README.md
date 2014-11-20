@@ -14,7 +14,7 @@ Then you can invoke it as follows:
 ``` rust
 // Put these two lines the top of the file.
 extern crate cld2;
-use cld2::{detect_language, Format, Reliable, Unreliable, Lang};
+use cld2::{detect_language, Format, Reliable, Lang};
 
 let text = "It is an ancient Mariner,
 And he stoppeth one of three.
@@ -36,9 +36,10 @@ them.
 
 ### License
 
-The cld2 library is distributed under the Apache License Version 2.0.  This
-also covers much of the code in `cld2-sys/src/wrapper.h`.  All of the new
-code is released into the public domain as described by the Unlicense.
+The original cld2 library is distributed under the Apache License Version
+2.0.  This also covers much of the code in `cld2-sys/src/wrapper.h`.  All
+of the new code is released into the public domain as described by the
+Unlicense.
 
 [cld2]: https://code.google.com/p/cld2/
 [apidoc]: http://www.rust-ci.org/emk/rust-cld2/doc/cld2/

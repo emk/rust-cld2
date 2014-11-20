@@ -2,7 +2,7 @@ extern crate gcc;
 
 use std::default::Default;
 
-static CLD2_FULL_SOURCES: &'static [&'static str] = [
+static CLD2_FULL_SOURCES: &'static [&'static str] = &[
     "cldutil.cc", "cldutil_shared.cc", "compact_lang_det.cc",
     "compact_lang_det_hint_code.cc", "compact_lang_det_impl.cc", "debug.cc",
     "fixunicodevalue.cc", "generated_entities.cc", "generated_language.cc",
