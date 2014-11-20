@@ -25,7 +25,7 @@
 //! [cld2]: https://code.google.com/p/cld2/
 //! [github]: https://github.com/emk/rust-cld2
 
-#![license = "Public domain (Unlicense) + Apache License 2.0"]
+#![license = "Public domain (Unlicense)"]
 #![unstable]
 #![deny(missing_docs)]
 #![feature(globs)]
