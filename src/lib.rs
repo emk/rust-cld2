@@ -19,6 +19,11 @@
 //! answers&mdash;it wouldn't make a very good multi-lingual spellchecker
 //! component, for example.  As always, pull requests are eagerly welcome!
 //!
+//! WARNING: We assume that nobody tries to change the loaded `cld2` data
+//! tables or calls the C++ function `CLD2::DetectLanguageVersion` behind
+//! our backs.  These configuration and debugging APIs in `cld2` are not
+//! thread safe.
+//!
 //! For more information, see the [GitHub project][github] for this
 //! library.
 //!
@@ -29,6 +34,7 @@
 #![deny(missing_docs)]
 #![feature(globs)]
 
+extern crate sync;
 extern crate libc;
 extern crate "cld2-sys" as ffi;
 

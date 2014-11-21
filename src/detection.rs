@@ -1,14 +1,41 @@
 //! Interfaces to the detector itself.
 
+use std::c_str::CString;
 use std::default::Default;
 use std::ptr::{null, null_mut};
+use sync::mutex::{StaticMutex, MUTEX_INIT};
 
 use libc::{c_int, c_double};
-use ffi::{CLDHints, Encoding, CLD2_ExtDetectLanguageSummary4};
+use ffi::{CLDHints, Encoding, CLD2_ExtDetectLanguageSummary4,
+          CLD2_DetectLanguageVersion};
 use ffi::Language as LanguageId;
 
 use language::LanguageIdExt;
 use types::*;
+
+// A lock which controls our access to DetectLanguageVersion, which uses
+// an internal buffer to format the string.
+//
+// TODO: Should we move this to the cld2-sys package, in case other
+// packages want to synchronize with us?
+static CLD2_VERSION_LOCK: StaticMutex = MUTEX_INIT;
+
+/// Get the version of cld2 and its embedded data files as a string.
+///
+/// ```
+/// use cld2::detector_version;
+/// format!("cld2 version: {}", detector_version());
+/// ```
+pub fn detector_version() -> String {
+    let _ = CLD2_VERSION_LOCK.lock();
+    unsafe {
+        let version_string = CLD2_DetectLanguageVersion();
+        assert!(version_string.is_not_null());
+        CString::new(version_string, false).as_str()
+            .expect("CLD2::DectectLanguageVersion returned invalid string")
+            .to_string()
+    }
+}
 
 /// Detect the language of the input text.
 ///
