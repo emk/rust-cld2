@@ -51,7 +51,6 @@ fn main() {
     let rel_sources_str: Vec<&str> = rel_sources.iter().map(|p| {
         p.as_str().unwrap()
     }).collect();
-    for s in rel_sources.iter() { println!("{}", s.display()); }
 
     // Run the build.
     gcc::compile_library("libcld2.a", &gcc::Config {
