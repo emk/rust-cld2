@@ -1,10 +1,10 @@
 [package]
 
 name = "cld2"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Eric Kidd <git@randomhacks.net>"]
 
-description = "Detect natural language used in text using cld2 library"
+description = "Detect natural language used in text using the cld2 library"
 license = "Unlicense"
 
 documentation = "http://www.rust-ci.org/emk/rust-cld2/doc/cld2/"
@@ -14,3 +14,4 @@ keywords = ["text"]
 
 [dependencies.cld2-sys]
 path = "cld2-sys"
+version = "0.0.2"

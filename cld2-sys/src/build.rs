@@ -2,7 +2,8 @@ extern crate gcc;
 
 use std::default::Default;
 
-// NOTE: make sure that the whitelist in prepackage.sh reflects this file list!
+// NOTE: Make sure there's no overlap between this list, and the exclusions
+// in Cargo.toml.
 static CLD2_FULL_SOURCES: &'static [&'static str] = &[
     "cldutil.cc", "cldutil_shared.cc", "compact_lang_det.cc",
     "compact_lang_det_hint_code.cc", "compact_lang_det_impl.cc", "debug.cc",
