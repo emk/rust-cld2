@@ -36,6 +36,13 @@ As always, pull requests are welcome!  Please keep any patches as simple as
 possible and include unit tests; that makes it much easier for me to merge
 them.
 
+If you want to get the C/C++ code building on another platform, please see
+`cld2-sys/build.rb` and [this build script guide][build-script].  You'll
+probably need to adjust some compiler options.  Please don't hesitate to
+ask questions; I'd love for this library to be cross platform.
+
+[build-script]: http://doc.crates.io/build-script.html
+
 In your first commit message, please include the following statement:
 
 > I dedicate any and all copyright interest in my contributions to this
