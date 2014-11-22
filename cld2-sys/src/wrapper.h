@@ -29,13 +29,15 @@
 #include "compact_lang_det.h"
 typedef CLD2::Language Language;
 typedef CLD2::uint16 uint16;
+typedef CLD2::int32 int32;
 
 #else
 
 // We're being run through bindgen or a similar tool, so just stub all
 // this.
 typedef long long size_t;
-typedef short uint16;
+typedef int int32;
+typedef unsigned short uint16;
 typedef char bool;
 // Corresponds to the Language enumeration in the C++ headers.
 typedef int Language;
@@ -57,9 +59,10 @@ extern "C" {
 
   typedef struct {
     int offset;                 // Starting byte offset in original buffer
-    uint16 bytes;               // Number of bytes in chunk
+    int32 bytes;                // Number of bytes in chunk
     uint16 lang1;               // Top lang, as full Language. Apply
-                                // static_cast<Language>() to this short value.
+                                //  static_cast<Language>() to this short value.
+    uint16 pad;                 // Make multiple of 4 bytes
   } ResultChunk;
 
   //typedef std::vector<ResultChunk> ResultChunkVector;
