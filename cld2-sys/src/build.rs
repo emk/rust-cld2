@@ -1,33 +1,63 @@
+#![feature(phase)]
+
+extern crate regex;
+#[phase(plugin)] extern crate regex_macros;
 extern crate gcc;
+extern crate toml;
 
+use std::collections::HashSet;
 use std::default::Default;
+use std::io::fs::{File,readdir};
+use std::os;
+use regex::Regex;
 
-// NOTE: Make sure there's no overlap between this list, and the exclusions
-// in Cargo.toml.
-static CLD2_FULL_SOURCES: &'static [&'static str] = &[
-    "cldutil.cc", "cldutil_shared.cc", "compact_lang_det.cc",
-    "compact_lang_det_hint_code.cc", "compact_lang_det_impl.cc", "debug.cc",
-    "fixunicodevalue.cc", "generated_entities.cc", "generated_language.cc",
-    "generated_ulscript.cc", "getonescriptspan.cc", "lang_script.cc",
-    "offsetmap.cc", "scoreonescriptspan.cc", "tote.cc", "utf8statetable.cc",
-    "cld_generated_cjk_uni_prop_80.cc", "cld2_generated_cjk_compatible.cc",
-    "cld_generated_cjk_delta_bi_32.cc", "generated_distinct_bi_0.cc",
-    "cld2_generated_quad0122.cc", "cld2_generated_deltaocta0122.cc",
-    "cld2_generated_distinctocta0122.cc",
-    "cld_generated_score_quad_octa_0122.cc"];
+// Fetch the 'package.exclude' list from our Cargo.toml file.  We'll
+// use this to decide what sources to admit.
+fn get_excluded_sources(manifest: &Path) -> HashSet<String> {
+    let text = File::open(manifest).read_to_string().unwrap();
+    let toml = toml::Parser::new(text.as_slice()).parse().unwrap();
+    let package = toml.get("package").unwrap().as_table().unwrap();
+    let exclude = package.get("exclude").unwrap().as_slice().unwrap();
+    exclude.iter().map(|e| {
+        let str = e.as_str().unwrap();
+        Path::new(str).filename_str().unwrap().to_string()
+    }).collect()
+}
+
+static CC_FILE: Regex = regex!(r"\.cc\z");
+
+// Get all the *.cc files in path that aren't excluded.
+fn get_cc_files(dir: &Path, excluded: &HashSet<String>) -> Vec<Path> {
+    readdir(dir).unwrap().iter().filter(|p| {
+        let filename = p.filename_str().unwrap();
+        CC_FILE.is_match(filename) && !excluded.contains(filename)
+    }).map(|e| e.clone()).collect()
+}
 
 fn main() {
+    let src = Path::new(os::getenv("CARGO_MANIFEST_DIR").unwrap());
     let includes = vec![Path::new("cld2/public"), Path::new("cld2/internal")];
-    let mut sources: Vec<String> = CLD2_FULL_SOURCES.iter()
-        .map(|p| format!("cld2/internal/{}", p))
-        .collect();
-    sources.push("src/wrapper.cpp".to_string());
-    let sources_str: Vec<&str> = sources.iter().map(|p| p.as_slice()).collect();
 
+    // Decide what sources to build.
+    let excluded = get_excluded_sources(&src.join("Cargo.toml"));
+    let mut sources =
+        get_cc_files(&src.join("cld2").join("internal"), &excluded);
+    sources.push(src.join("src").join("wrapper.cpp"));
+
+    // Convert the sources back to relative path &str values.
+    let rel_sources: Vec<Path> = sources.iter().map(|p| {
+        p.path_relative_from(&src).unwrap()
+    }).collect();
+    let rel_sources_str: Vec<&str> = rel_sources.iter().map(|p| {
+        p.as_str().unwrap()
+    }).collect();
+    for s in rel_sources.iter() { println!("{}", s.display()); }
+
+    // Run the build.
     gcc::compile_library("libcld2.a", &gcc::Config {
         include_directories: includes,
         .. Default::default()
-    }, sources_str.as_slice());
+    }, rel_sources_str.as_slice());
 
     // Decide how to link our C++ runtime.  Feel free to submit patches
     // to make this work on your platform.  Other likely options are "c++"
