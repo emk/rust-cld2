@@ -4,7 +4,7 @@ name = "cld2-sys"
 version = "0.0.2"
 authors = ["Eric Kidd <git@randomhacks.net>"]
 links = "cld2"
-build = "src/build.rs"
+build = "build.rs"
 
 description = "Unsafe, low-level wrapper for cld2 language detection library"
 license = "Unlicense/Apache-2.0"
