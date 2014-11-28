@@ -34,7 +34,7 @@
 #![deny(missing_docs)]
 #![feature(globs)]
 
-extern crate sync;
+extern crate rustrt;
 extern crate libc;
 extern crate "cld2-sys" as ffi;
 
