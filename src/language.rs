@@ -4,7 +4,7 @@
 #![allow(missing_docs)]
 #![experimental]
 
-use std::str::raw::c_str_to_static_slice;
+use std::str::from_c_str;
 use ffi::{CLD2_GetLanguageFromName, CLD2_LanguageName,
           CLD2_LanguageCode, CLD2_LanguageDeclaredName};
 pub use ffi::Language as LanguageId;
@@ -27,15 +27,15 @@ impl LanguageIdExt for LanguageId {
     }
 
     fn name(&self) -> &'static str {
-        unsafe { c_str_to_static_slice(CLD2_LanguageName(*self)) }
+        unsafe { from_c_str(CLD2_LanguageName(*self)) }
     }
 
     fn code(&self) -> &'static str {
-        unsafe { c_str_to_static_slice(CLD2_LanguageCode(*self)) }
+        unsafe { from_c_str(CLD2_LanguageCode(*self)) }
     }
 
     fn declared_name(&self) -> &'static str {
-        unsafe { c_str_to_static_slice(CLD2_LanguageDeclaredName(*self)) }
+        unsafe { from_c_str(CLD2_LanguageDeclaredName(*self)) }
     }
 
     fn is_unknown(&self) -> bool { *self == LanguageId::UNKNOWN_LANGUAGE }
