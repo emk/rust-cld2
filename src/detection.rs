@@ -1,6 +1,6 @@
 //! Interfaces to the detector itself.
 
-use rustrt::mutex::{StaticNativeMutex, NATIVE_MUTEX_INIT};
+use std::sync::{StaticMutex, MUTEX_INIT};
 use std::c_str::CString;
 use std::default::Default;
 use std::ptr::{null, null_mut};
@@ -18,7 +18,7 @@ use types::*;
 //
 // TODO: Should we move this to the cld2-sys package, in case other
 // packages want to synchronize with us?
-static CLD2_VERSION_LOCK: StaticNativeMutex = NATIVE_MUTEX_INIT;
+static CLD2_VERSION_LOCK: StaticMutex = MUTEX_INIT;
 
 /// Get the version of cld2 and its embedded data files as a string.
 ///
