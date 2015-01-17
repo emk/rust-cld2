@@ -4,12 +4,19 @@
 #![allow(missing_docs)]
 #![experimental]
 
-use std::str::from_c_str;
+use libc::types::os::arch::c95::c_char;
+use std::mem::transmute;
+use std::ffi::{CString, c_str_to_bytes};
+use std::str::from_utf8;
 use ffi::{CLD2_GetLanguageFromName, CLD2_LanguageName,
           CLD2_LanguageCode, CLD2_LanguageDeclaredName};
 pub use ffi::Language as LanguageId;
 
 use types::Lang;
+
+unsafe fn from_static_c_str<'a>(raw: &'a *const c_char) -> &'static str {
+    from_utf8(c_str_to_bytes(transmute(raw))).unwrap()
+}
 
 pub trait LanguageIdExt {
     fn from_name(name: &str) -> Self;
@@ -23,19 +30,22 @@ pub trait LanguageIdExt {
 
 impl LanguageIdExt for LanguageId {
     fn from_name(name: &str) -> LanguageId {
-        unsafe { name.with_c_str(|name| CLD2_GetLanguageFromName(name)) }
+        unsafe {
+            let c_name = CString::from_slice(name.as_bytes());
+            CLD2_GetLanguageFromName(c_name.as_ptr())
+        }
     }
 
     fn name(&self) -> &'static str {
-        unsafe { from_c_str(CLD2_LanguageName(*self)) }
+        unsafe { from_static_c_str(&CLD2_LanguageName(*self)) }
     }
 
     fn code(&self) -> &'static str {
-        unsafe { from_c_str(CLD2_LanguageCode(*self)) }
+        unsafe { from_static_c_str(&CLD2_LanguageCode(*self)) }
     }
 
     fn declared_name(&self) -> &'static str {
-        unsafe { from_c_str(CLD2_LanguageDeclaredName(*self)) }
+        unsafe { from_static_c_str(&CLD2_LanguageDeclaredName(*self)) }
     }
 
     fn is_unknown(&self) -> bool { *self == LanguageId::UNKNOWN_LANGUAGE }

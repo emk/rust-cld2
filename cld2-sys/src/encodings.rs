@@ -1,4 +1,4 @@
-#[deriving(Show,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
+#[derive(Show,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
 #[repr(C)]
 pub enum Encoding {
     ISO_8859_1           =  0,  //   ASCII
@@ -78,4 +78,4 @@ pub enum Encoding {
     SOFTBANK_ISO_2022_JP = 74,
 }
 
-pub static NUM_ENCODINGS: uint = 75;
+pub static NUM_ENCODINGS: usize = 75;

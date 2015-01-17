@@ -57,13 +57,13 @@ fn main() {
         let detected =
             detect_language_ext(text, Format::Text, &Default::default());
 
-        println!("Language: {}", detected.language);
-        println!("Reliability: {}", detected.reliability);
+        println!("Language: {:?}", detected.language);
+        println!("Reliability: {:?}", detected.reliability);
         println!("Bytes of text: {}", detected.text_bytes);
         println!("\n= Per-language scores:\n");
 
         for score in detected.scores.iter() {
-            println!("Language: {}", score.language);
+            println!("Language: {:?}", score.language);
             println!("Percent of input: {}%", score.percent);
             println!("Norm: {}\n", score.normalized_score);
         }

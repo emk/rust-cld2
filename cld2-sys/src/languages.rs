@@ -1,4 +1,4 @@
-#[deriving(Show,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
+#[derive(Show,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
 #[repr(C)]
 pub enum Language {
   ENGLISH                      = 0,  // en
@@ -617,4 +617,4 @@ pub enum Language {
   X_Takri                      = 613,  // xx-Takr
 }
 
-pub static NUM_LANGUAGES: uint = 614;
+pub static NUM_LANGUAGES: usize = 614;

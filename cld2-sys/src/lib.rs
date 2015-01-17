@@ -6,7 +6,7 @@
 //! If you need access to APIs which are not currently wrapped, please feel
 //! free to send pull requests!
 
-#![feature(globs)]
+#![allow(unstable)]
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 
@@ -59,7 +59,8 @@ Eftsoons his hand dropt he.
 #[test]
 fn test_result_chunks() {
     use libc::{c_int, c_double};
-    use std::slice::raw::buf_as_slice;
+    use std::slice::from_raw_buf;
+    use std::iter::repeat;
 
     let mixed = "
 It is an ancient Mariner,
@@ -83,9 +84,9 @@ Et puis encore comme ça.
                          encoding_hint: Encoding::UNKNOWN_ENCODING as c_int,
                          language_hint: Language::UNKNOWN_LANGUAGE};
     let mut language3: Vec<Language> =
-        Vec::from_elem(3, Language::UNKNOWN_LANGUAGE);
-    let mut percent3: Vec<c_int> = Vec::from_elem(3, 0);
-    let mut normalized_score3: Vec<c_double> = Vec::from_elem(3, 0.0);
+        repeat(Language::UNKNOWN_LANGUAGE).take(3).collect();
+    let mut percent3: Vec<c_int> = repeat(0).take(3).collect();
+    let mut normalized_score3: Vec<c_double> = repeat(0.0).take(3).collect();
     let mut text_bytes: c_int = 0;
     let mut is_reliable: bool = false;
 
@@ -106,30 +107,29 @@ Et puis encore comme ça.
     unsafe {
         let data = CLD2_ResultChunkVector_data(chunks as *const ResultChunks);
         let size = CLD2_ResultChunkVector_size(chunks as *const ResultChunks);
-        buf_as_slice(data, size as uint, |slice| {
-            //println!("Chunks: {}", slice);
-            let mut found_mariner = false;
-            let mut found_comme_ca = false;
-            for chunk in slice.iter() {
-                let text =
-                    mixed.slice(chunk.offset as uint,
-                                chunk.offset as uint + chunk.bytes as uint);
+        let slice = from_raw_buf(&data, size as usize);
+        //println!("Chunks: {}", slice);
+        let mut found_mariner = false;
+        let mut found_comme_ca = false;
+        for chunk in slice.iter() {
+            let text =
+                mixed.slice(chunk.offset as usize,
+                            chunk.offset as usize + chunk.bytes as usize);
 
-                if chunk.lang1 == Language::ENGLISH as u16
-                    && text.contains("ancient Mariner")
-                {
-                    found_mariner = true;
-                }
-
-                if chunk.lang1 == Language::FRENCH as u16
-                    && text.contains("comme ça")
-                {
-                    found_comme_ca = true;
-                }
+            if chunk.lang1 == Language::ENGLISH as u16
+                && text.contains("ancient Mariner")
+            {
+                found_mariner = true;
             }
-            assert!(found_mariner);
-            assert!(found_comme_ca);
-        });
+
+            if chunk.lang1 == Language::FRENCH as u16
+                && text.contains("comme ça")
+            {
+                found_comme_ca = true;
+            }
+        }
+        assert!(found_mariner);
+        assert!(found_comme_ca);
     };
 
     unsafe { CLD2_ResultChunkVector_delete(chunks); }
@@ -137,17 +137,19 @@ Et puis encore comme ça.
 
 #[test]
 fn test_language_names() {
-    use std::c_str::CString;
+    use std::ffi::{CString, c_str_to_bytes};
+    use std::str::from_utf8;
 
     let code = unsafe { 
         let char_ptr = CLD2_LanguageCode(Language::ENGLISH);
-        let c_str = CString::new(char_ptr, false);
-        c_str.as_str().unwrap().to_string()
+        let bytes = c_str_to_bytes(&char_ptr);
+        from_utf8(bytes).unwrap().to_string()
     };
     assert_eq!("en", code.as_slice());
 
     let language = unsafe {
-        "fr".to_string().with_c_str(|ptr| { CLD2_GetLanguageFromName(ptr) })
+        let c_str = CString::from_slice("fr".as_bytes());
+        CLD2_GetLanguageFromName(c_str.as_ptr())
     };
     assert_eq!(Language::FRENCH, language);
 }

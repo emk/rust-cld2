@@ -4,7 +4,7 @@ use ffi::Encoding;
 pub use self::Reliability::{Reliable, Unreliable};
 
 /// Possible data formats.
-#[deriving(PartialEq, Eq, Show, Copy)]
+#[derive(PartialEq, Eq, Show, Copy)]
 pub enum Format {
     /// Process the text as-is.
     Text, 
@@ -13,7 +13,7 @@ pub enum Format {
 }
 
 /// Is the output of the language decoder reliable?
-#[deriving(PartialEq, Eq, Show, Copy)]
+#[derive(PartialEq, Eq, Show, Copy)]
 pub enum Reliability {
     /// The decoder is reasonably confident about this guess.
     Reliable,
@@ -29,7 +29,7 @@ impl Reliability {
 }
 
 /// A language code, normally two letters for common languages.
-#[deriving(PartialEq, Eq, Show, Copy)]
+#[derive(PartialEq, Eq, Show, Copy)]
 pub struct Lang(pub &'static str);
 
 /// Hints to the decoder, which it will use to make better guesses.
@@ -44,7 +44,7 @@ pub struct Lang(pub &'static str);
 /// assert_eq!(Some("en"), hints.content_language);
 /// assert_eq!(None, hints.tld);
 /// ```
-#[deriving(Show, Default)]
+#[derive(Show, Default)]
 pub struct Hints<'a> {
     /// A value from an HTTP Content-Language header.  The value "fr,en"
     /// will bias the decoder towards French and English.
@@ -65,7 +65,7 @@ pub struct Hints<'a> {
 
 /// Detailed information about how well the input text matched a specific
 /// language.
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct LanguageScore {
     /// The language matched.
     pub language: Option<Lang>,
@@ -83,13 +83,13 @@ pub struct LanguageScore {
 ///
 /// Note: Do not rely on this struct containing only the fields listed
 /// below.  It may gain extra fields in the future.
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct DetectionResult {
     /// The language detected.
     pub language: Option<Lang>,
 
     /// The scores for the top 3 candidate languages.
-    pub scores: [LanguageScore, ..3],
+    pub scores: [LanguageScore; 3],
 
     /// The number of bytes of actual text found, excluding tags, etc.
     pub text_bytes: i32,
@@ -107,7 +107,7 @@ impl DetectionResult {
     /// Create a new DetectionResult.  You generally don't need to call
     /// this directly.
     #[experimental]
-    pub fn new(language: Option<Lang>, scores: [LanguageScore, ..3],
+    pub fn new(language: Option<Lang>, scores: [LanguageScore; 3],
                text_bytes: i32, reliability: Reliability) -> DetectionResult {
         DetectionResult{language: language, scores: scores,
                         text_bytes: text_bytes, reliability: reliability,

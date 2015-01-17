@@ -1,11 +1,12 @@
 //! Interfaces to the detector itself.
 
 use std::sync::{StaticMutex, MUTEX_INIT};
-use std::c_str::CString;
+use std::ffi::{CString, c_str_to_bytes};
+use std::str::from_utf8;
 use std::default::Default;
 use std::ptr::{null, null_mut};
 
-use libc::{c_int, c_double};
+use libc::{c_int, c_double, c_char};
 use ffi::{CLDHints, Encoding, CLD2_ExtDetectLanguageSummary4,
           CLD2_DetectLanguageVersion};
 use ffi::Language as LanguageId;
@@ -30,10 +31,9 @@ pub fn detector_version() -> String {
     unsafe {
         let _ = CLD2_VERSION_LOCK.lock();
         let version_string = CLD2_DetectLanguageVersion();
-        assert!(version_string.is_not_null());
-        CString::new(version_string, false).as_str()
-            .expect("CLD2::DectectLanguageVersion returned invalid string")
-            .to_string()
+        assert!(!version_string.is_null());
+        let bytes = c_str_to_bytes(&version_string);
+        from_utf8(bytes).unwrap().to_string()
     }
 }
 
@@ -88,8 +88,8 @@ pub fn detect_language_ext(text: &str, format: Format, hints: &Hints)
     let mut language3 = [LanguageId::UNKNOWN_LANGUAGE,
                          LanguageId::UNKNOWN_LANGUAGE,
                          LanguageId::UNKNOWN_LANGUAGE];
-    let mut percent3: [c_int, ..3] = [0, 0, 0];
-    let mut normalized_score3: [c_double, ..3] = [0.0, 0.0, 0.0];
+    let mut percent3: [c_int; 3] = [0, 0, 0];
+    let mut normalized_score3: [c_double; 3] = [0.0, 0.0, 0.0];
     let mut text_bytes: c_int = 0;
     let mut is_reliable: bool = false;
 
@@ -108,21 +108,24 @@ pub fn detect_language_ext(text: &str, format: Format, hints: &Hints)
     }
 }
 
+fn to_c_str_or_null(s: Option<&str>) -> *const c_char {
+    let opt_c_str = s.map(|: v| CString::from_slice(v.as_bytes()));
+    opt_c_str.map(|: v| v.as_ptr()).unwrap_or(null())
+}
+
 /// A value which can be converted to type `R` for use with the FFI.
 trait WithCRep<R> {
     /// Call the function `body` with a C-compatible represention of type
     /// `R`.
-    fn with_c_rep<T>(&self, body: |R| -> T) -> T;
+    fn with_c_rep<T, F: FnOnce(R) -> T>(&self, body: F) -> T;
 }
 
 impl<'a> WithCRep<*const CLDHints> for Hints<'a> {
-    fn with_c_rep<T>(&self, body: |*const CLDHints| -> T) -> T {
-        let clang = self.content_language.map(|v| v.to_c_str());
-        let clang_ptr = clang.map(|v| v.as_ptr()).unwrap_or(null());
-        let tld = self.tld.map(|v| v.to_c_str());
-        let tld_ptr = tld.map(|v| v.as_ptr()).unwrap_or(null());
+    fn with_c_rep<T, F: FnOnce(*const CLDHints) -> T>(&self, body: F) -> T {
+        let clang_ptr = to_c_str_or_null(self.content_language);
+        let tld_ptr = to_c_str_or_null(self.tld);
         let lang = self.language
-            .map(|Lang(c)| LanguageIdExt::from_name(c))
+            .map(|:Lang(c)| LanguageIdExt::from_name(c))
             .unwrap_or(LanguageId::UNKNOWN_LANGUAGE);
         let encoding = self.encoding
             .unwrap_or(Encoding::UNKNOWN_ENCODING) as c_int;
@@ -133,11 +136,11 @@ impl<'a> WithCRep<*const CLDHints> for Hints<'a> {
     }
 }
 
-fn from_ffi(lang: LanguageId, language3: &[LanguageId, ..3],
-            percent3: &[c_int, ..3], normalized_score3: &[c_double, ..3],
+fn from_ffi(lang: LanguageId, language3: &[LanguageId; 3],
+            percent3: &[c_int; 3], normalized_score3: &[c_double; 3],
             text_bytes: c_int, reliable: bool) -> DetectionResult
 {
-    let score_n = |n| {
+    let score_n = |&: n: usize| {
         LanguageScore{language: language3[n].to_lang(),
                       percent: percent3[n] as u8,
                       normalized_score: normalized_score3[n]}

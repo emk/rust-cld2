@@ -32,7 +32,7 @@
 
 #![unstable]
 #![deny(missing_docs)]
-#![feature(globs)]
+#![allow(unstable)]
 
 extern crate libc;
 extern crate "cld2-sys" as ffi;

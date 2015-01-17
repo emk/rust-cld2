@@ -1,7 +1,8 @@
-#![feature(phase)]
+#![feature(plugin)]
+#![allow(unstable)]
 
 extern crate regex;
-#[phase(plugin)] extern crate regex_macros;
+#[plugin] #[no_link] extern crate regex_macros;
 extern crate gcc;
 extern crate toml;
 
