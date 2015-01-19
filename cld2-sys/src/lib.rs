@@ -113,8 +113,8 @@ Et puis encore comme ça.
         let mut found_comme_ca = false;
         for chunk in slice.iter() {
             let text =
-                mixed.slice(chunk.offset as usize,
-                            chunk.offset as usize + chunk.bytes as usize);
+                &mixed[chunk.offset as usize..
+                       chunk.offset as usize + chunk.bytes as usize];
 
             if chunk.lang1 == Language::ENGLISH as u16
                 && text.contains("ancient Mariner")
