@@ -59,4 +59,5 @@ exclude = [
 [build-dependencies]
 gcc = "*"
 toml = "*"
+regex = "*"
 regex_macros = "*"
