@@ -8,7 +8,7 @@ extern crate toml;
 
 use std::collections::HashSet;
 use std::default::Default;
-use std::io::fs::{File,readdir};
+use std::old_io::fs::{File,readdir};
 use std::os;
 use regex::Regex;
 
