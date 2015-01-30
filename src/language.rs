@@ -2,7 +2,6 @@
 //! theoretically export this if somebody needed it.
 
 #![allow(missing_docs)]
-#![experimental]
 
 use libc::types::os::arch::c95::c_char;
 use std::mem::transmute;

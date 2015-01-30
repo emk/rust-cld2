@@ -54,9 +54,8 @@ pub struct Hints<'a> {
     /// will bias the decoder towards French.
     pub tld: Option<&'a str>,
 
-    /// The original encoding of the text, before it was converted to
-    /// UTF-8.  See `Encoding` for legal values.
-    #[experimental]
+    /// EXPERIMENTAL: The original encoding of the text, before it was
+    /// converted to UTF-8.  See `Encoding` for legal values.
     pub encoding: Option<Encoding>,
 
     /// An extra language hint.
@@ -104,9 +103,8 @@ pub struct DetectionResult {
 }
 
 impl DetectionResult {
-    /// Create a new DetectionResult.  You generally don't need to call
-    /// this directly.
-    #[experimental]
+    /// EXPERIMENTAL: Create a new DetectionResult.  You generally don't
+    /// need to call this directly.
     pub fn new(language: Option<Lang>, scores: [LanguageScore; 3],
                text_bytes: i32, reliability: Reliability) -> DetectionResult {
         DetectionResult{language: language, scores: scores,

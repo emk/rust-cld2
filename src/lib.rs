@@ -30,9 +30,12 @@
 //! [cld2]: https://code.google.com/p/cld2/
 //! [github]: https://github.com/emk/rust-cld2
 
-#![unstable]
+#![feature(std_misc)]
+#![feature(collections)]
+#![feature(libc)]
+#![feature(core)]
+
 #![deny(missing_docs)]
-#![allow(unstable)]
 
 extern crate libc;
 extern crate "cld2-sys" as ffi;

@@ -1,5 +1,9 @@
 #![feature(plugin)]
-#![allow(unstable)]
+#![feature(path)]
+#![feature(io)]
+#![feature(os)]
+#![feature(collections)]
+#![feature(core)]
 
 extern crate regex;
 #[plugin] #[no_link] extern crate regex_macros;
@@ -16,7 +20,7 @@ use regex::Regex;
 // use this to decide what sources to admit.
 fn get_excluded_sources(manifest: &Path) -> HashSet<String> {
     let text = File::open(manifest).read_to_string().unwrap();
-    let toml = toml::Parser::new(text.as_slice()).parse().unwrap();
+    let toml = toml::Parser::new(&text[]).parse().unwrap();
     let package = toml.get("package").unwrap().as_table().unwrap();
     let exclude = package.get("exclude").unwrap().as_slice().unwrap();
     exclude.iter().map(|e| {
@@ -57,7 +61,7 @@ fn main() {
     gcc::compile_library("libcld2.a", &gcc::Config {
         include_directories: includes,
         .. Default::default()
-    }, rel_sources_str.as_slice());
+    }, &rel_sources_str[]);
 
     // Decide how to link our C++ runtime.  Feel free to submit patches
     // to make this work on your platform.  Other likely options are "c++"

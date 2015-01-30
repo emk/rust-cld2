@@ -6,7 +6,12 @@
 //! If you need access to APIs which are not currently wrapped, please feel
 //! free to send pull requests!
 
-#![allow(unstable)]
+#![feature(libc)]
+#![feature(core)]
+// Needed for tests only, no way to declare.
+//#![feature(std_misc)]
+//#![feature(collections)]
+
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 
@@ -145,7 +150,7 @@ fn test_language_names() {
         let bytes = c_str_to_bytes(&char_ptr);
         from_utf8(bytes).unwrap().to_string()
     };
-    assert_eq!("en", code.as_slice());
+    assert_eq!("en", &code[]);
 
     let language = unsafe {
         let c_str = CString::from_slice("fr".as_bytes());
