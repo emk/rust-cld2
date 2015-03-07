@@ -31,9 +31,7 @@
 //! [github]: https://github.com/emk/rust-cld2
 
 #![feature(std_misc)]
-#![feature(collections)]
 #![feature(libc)]
-#![feature(core)]
 
 #![deny(missing_docs)]
 

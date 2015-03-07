@@ -1,7 +1,7 @@
 //! Interfaces to the detector itself.
 
 use std::sync::{StaticMutex, MUTEX_INIT};
-use std::ffi::{CString, c_str_to_bytes};
+use std::ffi::{CString, CStr};
 use std::str::from_utf8;
 use std::default::Default;
 use std::ptr::{null, null_mut};
@@ -32,7 +32,7 @@ pub fn detector_version() -> String {
         let _ = CLD2_VERSION_LOCK.lock();
         let version_string = CLD2_DetectLanguageVersion();
         assert!(!version_string.is_null());
-        let bytes = c_str_to_bytes(&version_string);
+        let bytes = CStr::from_ptr(version_string).to_bytes();
         from_utf8(bytes).unwrap().to_string()
     }
 }
@@ -109,8 +109,8 @@ pub fn detect_language_ext(text: &str, format: Format, hints: &Hints)
 }
 
 fn to_c_str_or_null(s: Option<&str>) -> *const c_char {
-    let opt_c_str = s.map(|: v| CString::from_slice(v.as_bytes()));
-    opt_c_str.map(|: v| v.as_ptr()).unwrap_or(null())
+    let opt_c_str = s.map(|v| CString::new(v.as_bytes()).unwrap());
+    opt_c_str.map(|v| v.as_ptr()).unwrap_or(null())
 }
 
 /// A value which can be converted to type `R` for use with the FFI.
@@ -125,7 +125,7 @@ impl<'a> WithCRep<*const CLDHints> for Hints<'a> {
         let clang_ptr = to_c_str_or_null(self.content_language);
         let tld_ptr = to_c_str_or_null(self.tld);
         let lang = self.language
-            .map(|:Lang(c)| LanguageIdExt::from_name(c))
+            .map(|Lang(c)| LanguageIdExt::from_name(c))
             .unwrap_or(LanguageId::UNKNOWN_LANGUAGE);
         let encoding = self.encoding
             .unwrap_or(Encoding::UNKNOWN_ENCODING) as c_int;
@@ -140,7 +140,7 @@ fn from_ffi(lang: LanguageId, language3: &[LanguageId; 3],
             percent3: &[c_int; 3], normalized_score3: &[c_double; 3],
             text_bytes: c_int, reliable: bool) -> DetectionResult
 {
-    let score_n = |&: n: usize| {
+    let score_n = |n: usize| {
         LanguageScore{language: language3[n].to_lang(),
                       percent: percent3[n] as u8,
                       normalized_score: normalized_score3[n]}

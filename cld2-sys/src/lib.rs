@@ -7,10 +7,8 @@
 //! free to send pull requests!
 
 #![feature(libc)]
-#![feature(core)]
-// Needed for tests only, no way to declare.
-//#![feature(std_misc)]
-//#![feature(collections)]
+#![cfg_attr(test, feature(core))]
+#![cfg_attr(test, feature(std_misc))]
 
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
@@ -64,7 +62,7 @@ Eftsoons his hand dropt he.
 #[test]
 fn test_result_chunks() {
     use libc::{c_int, c_double};
-    use std::slice::from_raw_buf;
+    use std::slice::from_raw_parts;
     use std::iter::repeat;
 
     let mixed = "
@@ -112,7 +110,7 @@ Et puis encore comme ça.
     unsafe {
         let data = CLD2_ResultChunkVector_data(chunks as *const ResultChunks);
         let size = CLD2_ResultChunkVector_size(chunks as *const ResultChunks);
-        let slice = from_raw_buf(&data, size as usize);
+        let slice: &[ResultChunk] = from_raw_parts(data, size as usize);
         //println!("Chunks: {}", slice);
         let mut found_mariner = false;
         let mut found_comme_ca = false;
@@ -142,18 +140,18 @@ Et puis encore comme ça.
 
 #[test]
 fn test_language_names() {
-    use std::ffi::{CString, c_str_to_bytes};
+    use std::ffi::{CString, CStr};
     use std::str::from_utf8;
 
     let code = unsafe { 
         let char_ptr = CLD2_LanguageCode(Language::ENGLISH);
-        let bytes = c_str_to_bytes(&char_ptr);
+        let bytes = CStr::from_ptr(char_ptr).to_bytes();
         from_utf8(bytes).unwrap().to_string()
     };
-    assert_eq!("en", &code[]);
+    assert_eq!("en", code);
 
     let language = unsafe {
-        let c_str = CString::from_slice("fr".as_bytes());
+        let c_str = CString::new("fr".as_bytes()).unwrap();
         CLD2_GetLanguageFromName(c_str.as_ptr())
     };
     assert_eq!(Language::FRENCH, language);

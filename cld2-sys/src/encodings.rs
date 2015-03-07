@@ -1,4 +1,4 @@
-#[derive(Show,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
+#[derive(Debug,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
 #[repr(C)]
 pub enum Encoding {
     ISO_8859_1           =  0,  //   ASCII

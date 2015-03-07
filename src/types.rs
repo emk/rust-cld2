@@ -4,7 +4,7 @@ use ffi::Encoding;
 pub use self::Reliability::{Reliable, Unreliable};
 
 /// Possible data formats.
-#[derive(PartialEq, Eq, Show, Copy)]
+#[derive(PartialEq, Eq, Debug, Copy)]
 pub enum Format {
     /// Process the text as-is.
     Text, 
@@ -13,7 +13,7 @@ pub enum Format {
 }
 
 /// Is the output of the language decoder reliable?
-#[derive(PartialEq, Eq, Show, Copy)]
+#[derive(PartialEq, Eq, Debug, Copy)]
 pub enum Reliability {
     /// The decoder is reasonably confident about this guess.
     Reliable,
@@ -29,7 +29,7 @@ impl Reliability {
 }
 
 /// A language code, normally two letters for common languages.
-#[derive(PartialEq, Eq, Show, Copy)]
+#[derive(PartialEq, Eq, Debug, Copy)]
 pub struct Lang(pub &'static str);
 
 /// Hints to the decoder, which it will use to make better guesses.
@@ -44,7 +44,7 @@ pub struct Lang(pub &'static str);
 /// assert_eq!(Some("en"), hints.content_language);
 /// assert_eq!(None, hints.tld);
 /// ```
-#[derive(Show, Default)]
+#[derive(Debug, Default)]
 pub struct Hints<'a> {
     /// A value from an HTTP Content-Language header.  The value "fr,en"
     /// will bias the decoder towards French and English.

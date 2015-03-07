@@ -1,4 +1,4 @@
-#[derive(Show,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
+#[derive(Debug,PartialEq,Eq,PartialOrd,Ord,Clone,Copy)]
 #[repr(C)]
 pub enum Language {
   ENGLISH                      = 0,  // en

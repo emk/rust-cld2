@@ -5,7 +5,7 @@
 
 use libc::types::os::arch::c95::c_char;
 use std::mem::transmute;
-use std::ffi::{CString, c_str_to_bytes};
+use std::ffi::{CString, CStr};
 use std::str::from_utf8;
 use ffi::{CLD2_GetLanguageFromName, CLD2_LanguageName,
           CLD2_LanguageCode, CLD2_LanguageDeclaredName};
@@ -14,7 +14,8 @@ pub use ffi::Language as LanguageId;
 use types::Lang;
 
 unsafe fn from_static_c_str<'a>(raw: &'a *const c_char) -> &'static str {
-    from_utf8(c_str_to_bytes(transmute(raw))).unwrap()
+    let ptr: *const c_char = transmute(*raw);
+    from_utf8(CStr::from_ptr(ptr).to_bytes()).unwrap()
 }
 
 pub trait LanguageIdExt {
@@ -30,7 +31,7 @@ pub trait LanguageIdExt {
 impl LanguageIdExt for LanguageId {
     fn from_name(name: &str) -> LanguageId {
         unsafe {
-            let c_name = CString::from_slice(name.as_bytes());
+            let c_name = CString::new(name.as_bytes()).unwrap();
             CLD2_GetLanguageFromName(c_name.as_ptr())
         }
     }

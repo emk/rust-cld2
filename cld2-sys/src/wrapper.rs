@@ -17,7 +17,7 @@ pub struct CLDHints {
     pub language_hint: Language,
 }
 
-#[derive(Show)]
+#[derive(Debug)]
 #[repr(C)]
 pub struct ResultChunk {
     pub offset: c_int,
