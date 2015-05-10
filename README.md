@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/emk/rust-cld2.svg?branch=master)](https://travis-ci.org/emk/rust-cld2) [![Latest version](https://img.shields.io/crates/v/cesu8.svg)](https://crates.io/crates/cesu8) [![License](https://img.shields.io/crates/l/cesu8.svg)](https://crates.io/crates/cesu8)
+[![Build Status](https://travis-ci.org/emk/rust-cld2.svg?branch=master)](https://travis-ci.org/emk/rust-cld2) [![Latest version](https://img.shields.io/crates/v/cld2.svg)](https://crates.io/crates/cld2) [![License](https://img.shields.io/crates/l/cld2.svg)](https://crates.io/crates/cld2)
 
 This Rust library detects the language of a string using the
 [cld2 library][cld2] from the Chromium project.
