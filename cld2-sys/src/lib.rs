@@ -7,8 +7,6 @@
 //! free to send pull requests!
 
 #![feature(libc)]
-#![cfg_attr(test, feature(core))]
-#![cfg_attr(test, feature(std_misc))]
 
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]

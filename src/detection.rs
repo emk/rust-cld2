@@ -1,5 +1,6 @@
 //! Interfaces to the detector itself.
 
+use core::array::FixedSizeArray;
 use std::sync::{StaticMutex, MUTEX_INIT};
 use std::ffi::{CString, CStr};
 use std::str::from_utf8;

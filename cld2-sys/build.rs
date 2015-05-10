@@ -1,10 +1,6 @@
 #![feature(collections)]
-#![feature(fs)]
-#![feature(io)]
-#![feature(path)]
+#![feature(path_relative_from)]
 #![feature(plugin)]
-#![feature(os)]
-
 #![plugin(regex_macros)]
 
 extern crate regex;

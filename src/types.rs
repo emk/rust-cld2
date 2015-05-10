@@ -4,7 +4,7 @@ use ffi::Encoding;
 pub use self::Reliability::{Reliable, Unreliable};
 
 /// Possible data formats.
-#[derive(PartialEq, Eq, Debug, Copy)]
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub enum Format {
     /// Process the text as-is.
     Text, 
@@ -13,7 +13,7 @@ pub enum Format {
 }
 
 /// Is the output of the language decoder reliable?
-#[derive(PartialEq, Eq, Debug, Copy)]
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub enum Reliability {
     /// The decoder is reasonably confident about this guess.
     Reliable,
@@ -29,7 +29,7 @@ impl Reliability {
 }
 
 /// A language code, normally two letters for common languages.
-#[derive(PartialEq, Eq, Debug, Copy)]
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub struct Lang(pub &'static str);
 
 /// Hints to the decoder, which it will use to make better guesses.
@@ -64,7 +64,7 @@ pub struct Hints<'a> {
 
 /// Detailed information about how well the input text matched a specific
 /// language.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct LanguageScore {
     /// The language matched.
     pub language: Option<Lang>,
@@ -82,7 +82,7 @@ pub struct LanguageScore {
 ///
 /// Note: Do not rely on this struct containing only the fields listed
 /// below.  It may gain extra fields in the future.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct DetectionResult {
     /// The language detected.
     pub language: Option<Lang>,
