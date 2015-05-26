@@ -12,6 +12,11 @@ repository = "https://github.com/emk/rust-cld2"
 readme = "README.md"
 keywords = ["text"]
 
+[features]
+# Allow access to unstable features when being built with a nightly compiler,
+# to keep travis-cargo happy and enable access to benchmarks if we want them.
+unstable = []
+
 [dependencies.cld2-sys]
 path = "cld2-sys"
 version = "*"
