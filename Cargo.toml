@@ -7,7 +7,7 @@ authors = ["Eric Kidd <git@randomhacks.net>"]
 description = "Detect natural language used in text using the cld2 library"
 license = "Unlicense"
 
-documentation = "http://www.rust-ci.org/emk/rust-cld2/doc/cld2/"
+documentation = "http://emk.github.io/rust-cld2/cld2/index.html"
 repository = "https://github.com/emk/rust-cld2"
 readme = "README.md"
 keywords = ["text"]
