@@ -30,15 +30,12 @@
 //! [cld2]: https://code.google.com/p/cld2/
 //! [github]: https://github.com/emk/rust-cld2
 
-#![feature(core)]
-#![feature(libc)]
-#![feature(std_misc)]
-
 #![deny(missing_docs)]
 
-extern crate core;
-extern crate libc;
 extern crate cld2_sys as ffi;
+#[macro_use]
+extern crate lazy_static;
+extern crate libc;
 
 pub use types::*;
 pub use detection::*;

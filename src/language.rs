@@ -3,7 +3,7 @@
 
 #![allow(missing_docs)]
 
-use libc::types::os::arch::c95::c_char;
+use libc::c_char;
 use std::mem::transmute;
 use std::ffi::{CString, CStr};
 use std::str::from_utf8;

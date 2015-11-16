@@ -2,10 +2,7 @@
 
 #![allow(missing_copy_implementations)]
 
-use libc::{c_char, c_int, c_double, c_void};
-use libc::types::os::arch::c95::size_t;
-use libc::types::common::c99::uint16_t;
-use libc::types::common::c99::int32_t;
+use libc::{c_char, c_int, c_double, c_void, size_t, uint16_t, int32_t};
 
 use languages::Language;
 

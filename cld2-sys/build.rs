@@ -1,14 +1,9 @@
-#![feature(collections)]
-#![feature(path_relative_from)]
-#![feature(plugin)]
-#![plugin(regex_macros)]
 
 extern crate regex;
 extern crate gcc;
 extern crate toml;
-extern crate collections;
 
-use collections::borrow::ToOwned;
+use std::borrow::ToOwned;
 use std::collections::HashSet;
 use std::env;
 use std::fs::{File, read_dir};
@@ -30,15 +25,14 @@ fn get_excluded_sources(manifest: &Path) -> HashSet<String> {
     }).collect()
 }
 
-static CC_FILE: Regex = regex!(r"\.cc\z");
-
 // Get all the *.cc files in path that aren't excluded.
 fn get_cc_files(dir: &Path, excluded: &HashSet<String>) -> Vec<PathBuf> {
+    let cc_file = Regex::new(r"\.cc\z").unwrap();
     read_dir(dir).unwrap().map(|entry| {
         entry.unwrap().path()
     }).filter(|p| {
         let filename = p.file_name().unwrap().to_str().unwrap();
-        CC_FILE.is_match(filename) && !excluded.contains(filename)
+        cc_file.is_match(filename) && !excluded.contains(filename)
     }).map(|p| p.to_owned()).collect()
 }
 
@@ -53,15 +47,16 @@ fn main() {
     sources.push(src.join("src").join("wrapper.cpp"));
 
     // Convert the sources back to relative path &str values.
-    let rel_sources: Vec<PathBuf> = sources.iter().map(|p| {
-        p.relative_from(&src).unwrap().to_owned()
-    }).collect();
+    // TODO: This required the unstable relative_from function.
+    //let rel_sources: Vec<PathBuf> = sources.iter().map(|p| {
+    //    p.relative_from(&src).unwrap().to_owned()
+    //}).collect();
 
     // Run the build.
     let mut config = gcc::Config::new();
     config.include(&Path::new("cld2/public"));
     config.include(&Path::new("cld2/internal"));
-    for f in rel_sources.iter() {
+    for f in sources.iter() {
         config.file(f);
     }
     config.compile("libcld2.a");

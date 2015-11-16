@@ -6,8 +6,6 @@
 //! If you need access to APIs which are not currently wrapped, please feel
 //! free to send pull requests!
 
-#![feature(libc)]
-
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 

@@ -1,7 +1,6 @@
 //! Interfaces to the detector itself.
 
-use core::array::FixedSizeArray;
-use std::sync::{StaticMutex, MUTEX_INIT};
+use std::sync::Mutex;
 use std::ffi::{CString, CStr};
 use std::str::from_utf8;
 use std::default::Default;
@@ -20,7 +19,13 @@ use types::*;
 //
 // TODO: Should we move this to the cld2-sys package, in case other
 // packages want to synchronize with us?
-static CLD2_VERSION_LOCK: StaticMutex = MUTEX_INIT;
+//
+// HACK: Yes, this is Mutex inside lazy_static, which is just plain wrong.
+// I just want to get this working on stable Rust with as little fuss as
+// possible.
+lazy_static! {
+    static ref CLD2_VERSION_LOCK: Mutex<u8> = Mutex::new(0);
+}
 
 /// Get the version of cld2 and its embedded data files as a string.
 ///
@@ -30,11 +35,13 @@ static CLD2_VERSION_LOCK: StaticMutex = MUTEX_INIT;
 /// ```
 pub fn detector_version() -> String {
     unsafe {
-        let _ = CLD2_VERSION_LOCK.lock();
+        let guard = CLD2_VERSION_LOCK.lock();
         let version_string = CLD2_DetectLanguageVersion();
         assert!(!version_string.is_null());
         let bytes = CStr::from_ptr(version_string).to_bytes();
-        from_utf8(bytes).unwrap().to_string()
+        let result = from_utf8(bytes).unwrap().to_string();
+        drop(guard);
+        result
     }
 }
 
@@ -99,9 +106,9 @@ pub fn detect_language_ext(text: &str, format: Format, hints: &Hints)
             let lang = CLD2_ExtDetectLanguageSummary4(
                 text.as_ptr() as *const i8, text.len() as c_int,
                 format == Format::Text, hints_ptr, 0,
-                language3.as_mut_slice().as_mut_ptr(),
-                percent3.as_mut_slice().as_mut_ptr(),
-                normalized_score3.as_mut_slice().as_mut_ptr(),
+                language3.as_mut_ptr(),
+                percent3.as_mut_ptr(),
+                normalized_score3.as_mut_ptr(),
                 null_mut(), &mut text_bytes, &mut is_reliable);
             from_ffi(lang, &language3, &percent3, &normalized_score3,
                      text_bytes, is_reliable)
