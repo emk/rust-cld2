@@ -54,16 +54,11 @@ fn main() {
 
     // Run the build.
     let mut config = gcc::Config::new();
+    config.cpp(true);
     config.include(&Path::new("cld2/public"));
     config.include(&Path::new("cld2/internal"));
     for f in sources.iter() {
         config.file(f);
     }
     config.compile("libcld2.a");
-
-    // Decide how to link our C++ runtime.  Feel free to submit patches
-    // to make this work on your platform.  Other likely options are "c++"
-    // and "c++abi" depending on OS and compiler.
-    let cxx_abi = "stdc++";
-    println!("cargo:rustc-flags=-l {}", cxx_abi);
 }
