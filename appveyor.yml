@@ -1,6 +1,7 @@
 environment:
   matrix:
-    - RUST_HOST: "i686-pc-windows-gnu"
+    # The `gcc` crate fails with linker errors on this host.
+    #- RUST_HOST: "i686-pc-windows-gnu"
     - RUST_HOST: "i686-pc-windows-msvc"
 
 install:
