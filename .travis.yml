@@ -1,20 +1,25 @@
 language: rust
 sudo: required
 rust:
-- nightly
+- "1.10.0"
+- "stable"
+- "beta"
+- "nightly"
+matrix:
+  include:
+  - os: osx
+    osx_image: xcode7.3
+    rust: stable
+  - os: osx
+    osx_image: xcode8
+    rust: stable
 before_script:
 - |
   pip install 'travis-cargo<0.2' --user &&
-  export PATH=$HOME/.local/bin:$PATH
+  export PATH=$HOME/.local/bin:$HOME/Library/Python/2.7/bin:$PATH
 script:
 - |
   travis-cargo build &&
   travis-cargo test &&
   travis-cargo bench &&
   travis-cargo doc
-after_success:
-- travis-cargo --only nightly doc-upload
-- travis-cargo coveralls
-env:
-  global:
-    secure: SI9vHfB1iQnahs6mWypJ7EVYMUl4eo74JbzCem7fjNFaYymEdna6B4Waxexdd6VJTCRoCchGLcLanP/VPtnA79WLxxrbVo6W7zz8T12tsk6gHNAlLcH4h2WcBDYdAkqS2D4UuXzGKyyzGXqBRFor57bIjKm1CreoThPpjogFG/8=
