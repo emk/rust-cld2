@@ -55,6 +55,7 @@ fn main() {
     // Run the build.
     let mut config = gcc::Config::new();
     config.cpp(true);
+    config.flag("-Wno-error=narrowing");
     config.include(&Path::new("cld2/public"));
     config.include(&Path::new("cld2/internal"));
     for f in sources.iter() {
