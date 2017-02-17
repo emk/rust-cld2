@@ -55,6 +55,11 @@ fn main() {
     // Run the build.
     let mut config = gcc::Config::new();
     config.cpp(true);
+    let cxxflags = match env::var("CXXFLAGS") {
+        Ok(val) => val + " -std=c++03",
+        Err(..) => String::from("-std=c++03"),
+    };
+    env::set_var("CXXFLAGS", &cxxflags);
     config.include(&Path::new("cld2/public"));
     config.include(&Path::new("cld2/internal"));
     for f in sources.iter() {
