@@ -1,7 +1,7 @@
 [package]
 
 name = "cld2"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Eric Kidd <git@randomhacks.net>"]
 
 description = "Detect natural language used in text using the cld2 library"
@@ -18,7 +18,7 @@ keywords = ["text"]
 unstable = []
 
 [dependencies]
-cld2-sys = { version = "1.0.0", path = "cld2-sys" }
+cld2-sys = { version = "1.0.1", path = "cld2-sys" }
 lazy_static = "0.1.15"
 libc = "0.2.2"
 

@@ -62,4 +62,4 @@ of the new code is released into the public domain as described by the
 Unlicense.
 
 [cld2]: https://code.google.com/p/cld2/
-[apidoc]: http://emk.github.io/rust-cld2/cld2/index.html
+[apidoc]: http://docs.rs/cld2
