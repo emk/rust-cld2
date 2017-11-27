@@ -16,7 +16,8 @@ repository = "https://github.com/emk/rust-cld2"
 # 10MB Rust package.  We start upstream, by remove a large unit-test data
 # file and stripping line comments out of the generated files.  Then we
 # strip out the docs directory, our own table-stripping script, plus a list
-# of source files that we're not actually building.
+# of source files that we're not actually building. Last, we strip out all
+# compiled code (*_chrome_* and *.o files).
 #
 # The command used to generate the list of unused *.cc files below looked
 # something like this:
@@ -28,7 +29,10 @@ repository = "https://github.com/emk/rust-cld2"
 # list using a toml parser, compare it against the source directly, and
 # generate a list of files to compile.
 exclude = [
-  "cld2/docs",
+  "*.o",
+  "*_chrome_*",
+
+  "cld2/docs/**",
   "cld2/strip_tables.sh",
 
   "cld2/internal/cld2_do_score.cc",
