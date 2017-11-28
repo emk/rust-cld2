@@ -1,7 +1,7 @@
 [package]
 
 name = "cld2"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Eric Kidd <git@randomhacks.net>"]
 
 description = "Detect natural language used in text using the cld2 library"
@@ -12,13 +12,16 @@ repository = "https://github.com/emk/rust-cld2"
 readme = "README.md"
 keywords = ["text"]
 
+[badges]
+maintenance = { status = "deprecated" }
+
 [features]
 # Allow access to unstable features when being built with a nightly compiler,
 # to keep travis-cargo happy and enable access to benchmarks if we want them.
 unstable = []
 
 [dependencies]
-cld2-sys = { version = "1.0.1", path = "cld2-sys" }
+cld2-sys = { version = "1.0.2", path = "cld2-sys" }
 lazy_static = "0.1.15"
 libc = "0.2.2"
 

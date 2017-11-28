@@ -1,5 +1,12 @@
 [![Build Status](https://travis-ci.org/emk/rust-cld2.svg?branch=master)](https://travis-ci.org/emk/rust-cld2) [![Latest version](https://img.shields.io/crates/v/cld2.svg)](https://crates.io/crates/cld2) [![License](https://img.shields.io/crates/l/cld2.svg)](https://crates.io/crates/cld2)
 
+**DEPRECATED in favor of [whatlang][],** which is native Rust and
+smaller. If you have a compelling use-case for this code, please open an
+issue. Simple PRs, especially for bug fixes, will still be read and
+possibly merged.
+
+[whatlang]: https://crates.io/crates/whatlang
+
 This Rust library detects the language of a string using the
 [cld2 library][cld2] from the Chromium project.
 

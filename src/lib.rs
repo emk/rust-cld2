@@ -1,3 +1,9 @@
+//! **DEPRECATED in favor of [whatlang][],** which is native Rust and
+//! smaller. If you have a compelling use-case for this code, please open
+//! an issue.
+//!
+//! [whatlang]: https://crates.io/crates/whatlang
+//!
 //! Detect the language of a string using the [cld2 library][cld2] from the
 //! Chromium project.
 //!
